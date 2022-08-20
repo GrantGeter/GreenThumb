@@ -14,3 +14,22 @@ server.use((req, res, next) => {
     )
     next();
 })
+
+const bodyParser = require('body-parser');
+server.use(bodyParser.json());
+
+const morgan = require('morgan');
+server.use(moragn('dev'));
+
+require('dotenv').config();
+const client = require('./db/client');
+
+const apiRouter = require('./routes/api')
+server.use('/api', apiRouter);
+
+const { PORT = 3030 } = process.env;
+
+server.listen(PORT, () => {
+    console.log("Server up on ", PORT);
+    client.connect();
+})
